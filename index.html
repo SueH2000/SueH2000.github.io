@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sue Hsiung — Data Science Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#f8f9fa; --surface:#ffffff; --border:#e2e8f0;
+  --text:#1a202c; --muted:#718096; --accent:#3b82f6;
+  --green:#38a169; --red:#e53e3e; --purple:#8b5cf6;
+  --radius:10px; --shadow:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.1);
+}
+html { scroll-behavior: smooth; }
+body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; font-size:15px; line-height:1.6; }
+
+/* HEADER */
+header { background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.header-inner { max-width:1000px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:56px; }
+.logo { font-weight:700; font-size:1rem; color:var(--text); text-decoration:none; }
+nav { display:flex; gap:4px; }
+nav a { font-size:0.82rem; color:var(--muted); text-decoration:none; padding:5px 10px; border-radius:6px; transition:all 0.15s; }
+nav a:hover { background:var(--bg); color:var(--text); }
+
+/* HERO */
+.hero { background:var(--surface); border-bottom:1px solid var(--border); padding:64px 24px 56px; text-align:center; }
+.hero h1 { font-size:clamp(2rem,5vw,2.8rem); font-weight:700; letter-spacing:-0.02em; line-height:1.15; }
+.hero h1 span { color:var(--accent); }
+.hero p { color:var(--muted); font-size:1rem; margin:12px auto 0; max-width:500px; }
+.hero-tags { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+.tag { font-size:0.75rem; font-weight:500; padding:4px 10px; border-radius:20px; border:1px solid var(--border); color:var(--muted); background:var(--bg); }
+.hero-links { display:flex; gap:10px; justify-content:center; margin-top:24px; }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border-radius:8px; font-size:0.85rem; font-weight:500; text-decoration:none; transition:all 0.15s; cursor:pointer; border:none; font-family:inherit; }
+.btn-primary { background:var(--accent); color:white; }
+.btn-primary:hover { background:#2563eb; }
+.btn-ghost { background:var(--surface); color:var(--text); border:1px solid var(--border); }
+.btn-ghost:hover { background:var(--bg); }
+
+/* LAYOUT */
+.main { max-width:1000px; margin:0 auto; padding:48px 24px 80px; }
+section { margin-bottom:72px; }
+.section-label { font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+.section-title { font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; }
+.section-desc { color:var(--muted); font-size:0.92rem; margin-top:6px; }
+.section-header { margin-bottom:24px; }
+
+/* CARDS */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+
+/* STATS */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:64px; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); }
+.stat-value { font-size:1.6rem; font-weight:700; letter-spacing:-0.03em; line-height:1; }
+.stat-label { font-size:0.75rem; color:var(--muted); margin-top:4px; }
+
+/* TABS */
+.tab-bar { display:flex; gap:2px; border-bottom:1px solid var(--border); padding:0 20px; background:var(--surface); overflow-x:auto; }
+.tab-btn { font-size:0.82rem; font-weight:500; color:var(--muted); padding:11px 14px; cursor:pointer; border:none; background:none; border-bottom:2px solid transparent; margin-bottom:-1px; white-space:nowrap; font-family:inherit; transition:all 0.15s; }
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+.tab-panel { display:none; padding:24px; }
+.tab-panel.active { display:block; }
+
+/* PIPELINE */
+.pipeline { display:flex; overflow-x:auto; border-radius:var(--radius); border:1px solid var(--border); }
+.pipeline-step { flex:1; min-width:130px; padding:14px 16px; cursor:pointer; transition:background 0.15s; background:var(--surface); border-right:1px solid var(--border); }
+.pipeline-step:last-child { border-right:none; }
+.pipeline-step:hover, .pipeline-step.active { background:#eff6ff; }
+.pipeline-step.active .step-name { color:var(--accent); }
+.step-num { font-size:0.62rem; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:0.06em; }
+.step-name { font-size:0.82rem; font-weight:600; margin-top:2px; }
+.step-sub { font-size:0.7rem; color:var(--muted); margin-top:2px; line-height:1.4; }
+.pipeline-detail { background:#eff6ff; border-top:1px solid #bfdbfe; border-radius:0 0 var(--radius) var(--radius); padding:12px 16px; font-size:0.82rem; color:#1e40af; font-family:'JetBrains Mono',monospace; display:none; }
+.pipeline-detail.show { display:block; }
+
+/* PARAMS */
+.param-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; }
+.param-item { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+.param-key { font-size:0.7rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+.param-val { font-size:0.92rem; font-weight:600; margin-top:2px; }
+
+/* CODE */
+.code-block { background:#1e293b; color:#e2e8f0; border-radius:8px; padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; line-height:1.8; overflow-x:auto; margin-top:16px; }
+.cg { color:#4ade80; } .cb { color:#93c5fd; } .cm { color:#64748b; }
+
+/* TABLE */
+table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+th { text-align:left; padding:9px 12px; font-size:0.72rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
+td { padding:9px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:var(--bg); }
+code { font-family:'JetBrains Mono',monospace; font-size:0.8em; background:var(--bg); padding:1px 5px; border-radius:3px; }
+
+/* BADGES */
+.badge { display:inline-flex; align-items:center; font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:20px; }
+.badge-blue { background:#dbeafe; color:#1d4ed8; }
+.badge-purple { background:#ede9fe; color:#6d28d9; }
+.badge-green { background:#dcfce7; color:#166534; }
+.badge-red { background:#fee2e2; color:#991b1b; }
+
+/* SKILLS */
+.skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+.skill-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; }
+.skill-title { font-weight:600; font-size:0.88rem; margin-bottom:10px; }
+.skill-tags { display:flex; flex-wrap:wrap; gap:6px; }
+
+/* CONTACT */
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.contact-label { font-size:0.72rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.contact-value { font-size:0.92rem; font-weight:500; }
+.contact-value a { color:var(--accent); text-decoration:none; }
+.contact-value a:hover { text-decoration:underline; }
+
+/* FOOTER */
+footer { border-top:1px solid var(--border); background:var(--surface); padding:20px 24px; text-align:center; font-size:0.8rem; color:var(--muted); }
+
+/* NOTE */
+.note { font-size:0.82rem; color:var(--muted); margin-top:12px; line-height:1.6; }
+
+@media (max-width:640px) {
+  .contact-grid { grid-template-columns:1fr; }
+  .pipeline { flex-direction:column; }
+  .pipeline-step { border-right:none; border-bottom:1px solid var(--border); }
+  .pipeline-step:last-child { border-bottom:none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">Sue Hsiung</a>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Data Analyst &amp; <span>Computational Scientist</span></h1>
+  <p>Using data to understand human behavior, model biological systems, and support clinical decision-making — across behavioral science, bioinformatics, and oncology.</p>
+  <div class="hero-tags">
+    <span class="tag">Behavioral Decision-Making</span>
+    <span class="tag">Bioinformatics</span>
+    <span class="tag">Oncology Classification</span>
+    <span class="tag">Python · R · SQL</span>
+    <span class="tag">MSc Lund University</span>
+  </div>
+  <div class="hero-links">
+    <a href="https://github.com/SueH2000" target="_blank" class="btn btn-primary">GitHub ↗</a>
+    <a href="/cdn-cgi/l/email-protection#daa9afbff4b7b2b2a9b3afb4bd9abdb7bbb3b6f4b9b5b7" class="btn btn-ghost">Get in touch</a>
+  </div>
+</div>
+
+<main class="main">
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-value" style="color:var(--accent)">5</div><div class="stat-label">Projects</div></div>
+  <div class="stat-card"><div class="stat-value" style="color:var(--green)">0.980</div><div class="stat-label">Best AUROC</div></div>
+  <div class="stat-card"><div class="stat-value" style="color:var(--red)">97.4%</div><div class="stat-label">Best Accuracy</div></div>
+  <div class="stat-card"><div class="stat-value" style="color:var(--purple)">12k+</div><div class="stat-label">Training Records</div></div>
+</div>
+
+<!-- PROJECT 1 -->
+<section id="projects">
+  <div class="section-header">
+    <div class="section-label">Project 01</div>
+    <div class="section-title">Typhoon Day-Off Predictor</div>
+    <div class="section-desc">Modeling collective human decision-making under environmental risk — predicting whether Taiwan counties declare a typhoon day off, deployed as a Flask API and Flutter mobile app.</div>
+  </div>
+  <div class="card">
+    <div class="tab-bar" id="t1-tabs">
+      <button class="tab-btn active" onclick="tab('t1','pipeline')">ML Pipeline</button>
+      <button class="tab-btn" onclick="tab('t1','features')">Feature Importance</button>
+      <button class="tab-btn" onclick="tab('t1','scaler')">Scaler Ranges</button>
+      <button class="tab-btn" onclick="tab('t1','params')">Model Params</button>
+    </div>
+    <div class="tab-panel active" id="t1-pipeline">
+      <p class="note" style="margin-bottom:14px">Click each stage for details.</p>
+      <div class="pipeline" id="pip-steps"></div>
+      <div id="pip-detail" class="pipeline-detail"></div>
+      <div class="code-block"><span class="cg">$</span> gunicorn app:app &nbsp;<span class="cm"># deployed on Render / Railway</span><br><span class="cb">→</span> Flutter app calls /predict → P(typhoon day off) for selected county</div>
+    </div>
+    <div class="tab-panel" id="t1-features"><div id="ch-feat"></div></div>
+    <div class="tab-panel" id="t1-scaler">
+      <p class="note" style="margin-bottom:14px">From <code>MMscaler.joblib</code> — trained on ~12,466 typhoon records (sklearn 1.0.2).</p>
+      <div id="ch-scaler"></div>
+    </div>
+    <div class="tab-panel" id="t1-params">
+      <div class="param-grid">
+        <div class="param-item"><div class="param-key">n_estimators</div><div class="param-val">420</div></div>
+        <div class="param-item"><div class="param-key">max_depth</div><div class="param-val">45</div></div>
+        <div class="param-item"><div class="param-key">min_samples_split</div><div class="param-val">6</div></div>
+        <div class="param-item"><div class="param-key">class_weight</div><div class="param-val">'balanced'</div></div>
+        <div class="param-item"><div class="param-key">criterion</div><div class="param-val">'gini'</div></div>
+        <div class="param-item"><div class="param-key">training records</div><div class="param-val">~12,466</div></div>
+        <div class="param-item"><div class="param-key">features total</div><div class="param-val">24</div></div>
+        <div class="param-item"><div class="param-key">KNN imputed</div><div class="param-val">13 / 24</div></div>
+        <div class="param-item"><div class="param-key">KNN k</div><div class="param-val">5, distance-weighted</div></div>
+        <div class="param-item"><div class="param-key">weather API</div><div class="param-val">Open-Meteo (free)</div></div>
+        <div class="param-item"><div class="param-key">backend</div><div class="param-val">Flask + Gunicorn</div></div>
+        <div class="param-item"><div class="param-key">mobile</div><div class="param-val">Flutter (Dart)</div></div>
+      </div>
+      <div style="margin-top:16px"><a href="https://github.com/SueH2000/Typhoon_dayoff_bot" target="_blank" class="btn btn-ghost" style="font-size:0.8rem">↗ GitHub</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 2 -->
+<section>
+  <div class="section-header">
+    <div class="section-label">Project 02</div>
+    <div class="section-title">Alzheimer's Diagnosis ML</div>
+    <div class="section-desc">Identifying behavioral and cognitive indicators of Alzheimer's disease in 2,149 patients — comparing clustering, tree-based, and neural network approaches for clinical decision support.</div>
+  </div>
+  <div class="card">
+    <div class="tab-bar" id="t2-tabs">
+      <button class="tab-btn active" onclick="tab('t2','models')">Model Comparison</button>
+      <button class="tab-btn" onclick="tab('t2','feats')">Feature Correlations</button>
+      <button class="tab-btn" onclick="tab('t2','kmeans')">K-Means Tuning</button>
+      <button class="tab-btn" onclick="tab('t2','nn')">Neural Net Training</button>
+    </div>
+    <div class="tab-panel active" id="t2-models"><div id="ch-alz-models"></div></div>
+    <div class="tab-panel" id="t2-feats"><div id="ch-alz-feats"></div></div>
+    <div class="tab-panel" id="t2-kmeans">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div><div style="font-size:0.8rem;font-weight:600;margin-bottom:10px;color:var(--muted)">Elbow Method</div><div id="ch-elbow"></div></div>
+        <div><div style="font-size:0.8rem;font-weight:600;margin-bottom:10px;color:var(--muted)">Silhouette Score</div><div id="ch-sil"></div></div>
+      </div>
+      <p class="note">Elbow at k=7 · Best silhouette at k=2 (score=0.146) · Final model uses k=7</p>
+    </div>
+    <div class="tab-panel" id="t2-nn">
+      <div id="ch-nn"></div>
+      <p class="note">Architecture: 32→16→8→1 · Dropout 0.2×3 · Adam · EarlyStopping patience=5 · Stopped at epoch 31</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 3 -->
+<section>
+  <div class="section-header">
+    <div class="section-label">Project 03</div>
+    <div class="section-title">Monte Carlo — Lennard-Jones Fluids</div>
+    <div class="section-desc">Physics simulation of molecular fluid behavior using Metropolis Monte Carlo — modelling phase transitions and structural properties relevant to biophysical systems.</div>
+  </div>
+  <div class="card">
+    <div class="tab-bar" id="t3-tabs">
+      <button class="tab-btn active" onclick="tab('t3','lj')">LJ Potential</button>
+      <button class="tab-btn" onclick="tab('t3','energy')">NVT Convergence</button>
+      <button class="tab-btn" onclick="tab('t3','rdf')">g(r) RDF</button>
+      <button class="tab-btn" onclick="tab('t3','simparams')">Sim Parameters</button>
+    </div>
+    <div class="tab-panel active" id="t3-lj">
+      <div id="ch-lj"></div>
+      <p class="note">U(r) = 4ε[(σ/r)¹² − (σ/r)⁶] · ε=1.05, σ=1.0 · U<sub>min</sub>=−ε at r≈1.12σ</p>
+    </div>
+    <div class="tab-panel" id="t3-energy">
+      <div id="ch-energy"></div>
+      <p class="note">Energy/N converges after ~100k iterations · 500k NVT steps total · seed=0</p>
+    </div>
+    <div class="tab-panel" id="t3-rdf">
+      <div id="ch-rdf"></div>
+      <p class="note">g(r) averaged over 10 NVT snapshots · first shell peak at r≈1.1σ · liquid phase ρ=0.74</p>
+    </div>
+    <div class="tab-panel" id="t3-simparams">
+      <div class="param-grid">
+        <div class="param-item"><div class="param-key">N particles</div><div class="param-val">1,000</div></div>
+        <div class="param-item"><div class="param-key">ρ liquid</div><div class="param-val">0.74</div></div>
+        <div class="param-item"><div class="param-key">ρ gas</div><div class="param-val">0.023</div></div>
+        <div class="param-item"><div class="param-key">ε</div><div class="param-val">1.05</div></div>
+        <div class="param-item"><div class="param-key">σ</div><div class="param-val">1.0</div></div>
+        <div class="param-item"><div class="param-key">T* = kT/ε</div><div class="param-val">≈ 0.952</div></div>
+        <div class="param-item"><div class="param-key">δ max displacement</div><div class="param-val">0.5</div></div>
+        <div class="param-item"><div class="param-key">NVT iterations</div><div class="param-val">500,000</div></div>
+        <div class="param-item"><div class="param-key">NPT iterations</div><div class="param-val">1,000,000</div></div>
+        <div class="param-item"><div class="param-key">r cutoff</div><div class="param-val">r² ≥ 2.5</div></div>
+        <div class="param-item"><div class="param-key">boundary</div><div class="param-val">PBC min-image</div></div>
+        <div class="param-item"><div class="param-key">RDF snapshots</div><div class="param-val">10</div></div>
+      </div>
+      <div style="margin-top:16px"><a href="https://github.com/SueH2000/MC-simulations-----Lennard-Jones-fluids" target="_blank" class="btn btn-ghost" style="font-size:0.8rem">↗ GitHub</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 4 -->
+<section>
+  <div class="section-header">
+    <div class="section-label">Project 04</div>
+    <div class="section-title">Marketing Pipeline &amp; Lead Scoring</div>
+    <div class="section-desc">Predicting human conversion decisions from behavioral engagement signals — end-to-end ETL pipeline and lead scoring model on 9,240 leads, achieving AUROC 0.980.</div>
+  </div>
+  <div class="card">
+    <div class="tab-bar" id="t4-tabs">
+      <button class="tab-btn active" onclick="tab('t4','funnel')">Lead Funnel</button>
+      <button class="tab-btn" onclick="tab('t4','channels')">Channel Analysis</button>
+      <button class="tab-btn" onclick="tab('t4','featimp')">Feature Importance</button>
+      <button class="tab-btn" onclick="tab('t4','roc')">ROC Curve</button>
+    </div>
+    <div class="tab-panel active" id="t4-funnel"><div id="ch-funnel"></div></div>
+    <div class="tab-panel" id="t4-channels"><div id="ch-channels"></div></div>
+    <div class="tab-panel" id="t4-featimp"><div id="ch-mktfeat"></div></div>
+    <div class="tab-panel" id="t4-roc">
+      <div id="ch-roc"></div>
+      <p class="note">AUROC = 0.980 · RandomForest(n_estimators=300) · 9,240 leads · 38.5% conversion rate</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 5 -->
+<section>
+  <div class="section-header">
+    <div class="section-label">Project 05</div>
+    <div class="section-title">FASTA Parser &amp; MSA Scorer</div>
+    <div class="section-desc">Bioinformatics pipeline for parsing genetic data and scoring pairwise sequence alignments — enabling phylogenetic analysis of mtDNA and Y-chromosome variation across individuals.</div>
+  </div>
+  <div class="card">
+    <div class="tab-bar" id="t5-tabs">
+      <button class="tab-btn active" onclick="tab('t5','overview')">Overview</button>
+      <button class="tab-btn" onclick="tab('t5','parser')">FASTA Parser</button>
+      <button class="tab-btn" onclick="tab('t5','msa')">MSA Scorer</button>
+      <button class="tab-btn" onclick="tab('t5','demo')">Live Demo</button>
+    </div>
+    <div class="tab-panel active" id="t5-overview">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:600;margin-bottom:10px">Two-part workflow</div>
+          <p style="font-size:0.88rem;color:var(--muted);line-height:1.75">
+            <strong style="color:var(--text)">Part 1 — FastaParser.py</strong><br>
+            Reads a cp950-encoded genetic data file and writes two FASTA files — one for mtDNA, one for Y chromosome.<br><br>
+            <strong style="color:var(--text)">Part 2 — MSA.py</strong><br>
+            Reads any aligned FASTA file and scores every pairwise alignment using match / gap / transition / transversion weights.
+          </p>
+        </div>
+        <div>
+          <div style="font-weight:600;margin-bottom:10px">Scoring parameters</div>
+          <table>
+            <tr><th>Key</th><th>Score</th><th>Description</th></tr>
+            <tr><td><code>match</code></td><td><strong>+1</strong></td><td>Identical bases</td></tr>
+            <tr><td><code>gap</code></td><td><strong>−1</strong></td><td>Insertion / deletion</td></tr>
+            <tr><td><code>transition</code></td><td><strong>−1</strong></td><td>A↔G or C↔T</td></tr>
+            <tr><td><code>transversion</code></td><td><strong>−2</strong></td><td>A/G ↔ C/T</td></tr>
+          </table>
+          <div style="margin-top:14px"><a href="https://github.com/SueH2000/Workflow-example" target="_blank" class="btn btn-ghost" style="font-size:0.8rem">↗ GitHub</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-panel" id="t5-parser">
+      <table>
+        <tr><th>Step</th><th>Code</th><th>Purpose</th></tr>
+        <tr><td><span class="badge badge-blue">1</span> Read</td><td><code>open(infile, encoding='cp950', errors='replace')</code></td><td>Handles legacy CJK-encoded files</td></tr>
+        <tr><td><span class="badge badge-blue">2</span> Normalise</td><td><code>replace('\n\n\n', '\n\n')</code></td><td>Consistent paragraph separators</td></tr>
+        <tr><td><span class="badge badge-blue">3</span> Split</td><td><code>data.strip().split('\n\n')</code></td><td>One paragraph = one individual</td></tr>
+        <tr><td><span class="badge badge-blue">4</span> Parse</td><td><code>lines[0]=ID; scan for label; lines[i+1]=seq</code></td><td>Extracts ID and sequence</td></tr>
+        <tr><td><span class="badge badge-blue">5</span> Output</td><td><code>f"&gt;{ID}\n{seq}\n" → mtDNA.fna + Y.fna</code></td><td>Standard FASTA format, UTF-8</td></tr>
+      </table>
+      <div class="code-block">
+        <span class="cg">$</span> python FastaParser.py GeneticData_1.txt mtDNA.fna Y.fna<br>
+        <span class="cg">$</span> python FastaParser.py GeneticData_1.txt &nbsp;<span class="cm"># uses default filenames</span>
+      </div>
+    </div>
+    <div class="tab-panel" id="t5-msa">
+      <table>
+        <tr><th>Step</th><th>Detail</th></tr>
+        <tr><td><span class="badge badge-purple">1</span> argparse</td><td><code>-f fasta &nbsp;-p params &nbsp;-o output</code> — all flags documented</td></tr>
+        <tr><td><span class="badge badge-purple">2</span> Validate</td><td>FileNotFoundError · empty-file check · invalid nucleotide counter (&gt;5 → quit)</td></tr>
+        <tr><td><span class="badge badge-purple">3</span> Read FASTA</td><td>Build <code>dic_seq = {ID: sequence}</code> · allowed: A C G T - ? · skip duplicates &amp; invalids</td></tr>
+        <tr><td><span class="badge badge-purple">4</span> Score</td><td>O(n²) all-pairs loop · <code>alignment_score(x,y)</code> + <code>alignment_identity_p(x,y)</code></td></tr>
+        <tr><td><span class="badge badge-purple">5</span> Output</td><td><code>SampleA \t SampleB \t IdentityScore \t Score</code> — tab-separated TSV</td></tr>
+      </table>
+      <div class="code-block">
+        <span class="cg">$</span> python MSA.py -f mtDNA.fna -p parameter.txt -o scores.txt<br>
+        <span class="cm"># Output: SampleA  SampleB  IdentityScore  Score</span>
+      </div>
+    </div>
+    <div class="tab-panel" id="t5-demo">
+      <p class="note" style="margin-bottom:16px">Live <code>alignment_score()</code> and <code>alignment_identity_p()</code> from MSA.py running in-browser.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+        <div>
+          <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:6px">Sequence A</label>
+          <select id="seqA" onchange="runDemo()" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.85rem;background:var(--surface)">
+            <option value="0">HsaA — ATGCTAGCTAGC-ATCGATCG</option>
+            <option value="1">HsaB — ATGCTAGCTAGCAATCGATCG</option>
+            <option value="2">HsaC — ATGCTGGCTAGCAATCGAACG</option>
+            <option value="3">HsaD — ACGCTAGCAAGC-ATCGATTG</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:6px">Sequence B</label>
+          <select id="seqB" onchange="runDemo()" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.85rem;background:var(--surface)">
+            <option value="0">HsaA — ATGCTAGCTAGC-ATCGATCG</option>
+            <option value="1" selected>HsaB — ATGCTAGCTAGCAATCGATCG</option>
+            <option value="2">HsaC — ATGCTGGCTAGCAATCGAACG</option>
+            <option value="3">HsaD — ACGCTAGCAAGC-ATCGATTG</option>
+          </select>
+        </div>
+      </div>
+      <div id="demo-viz" style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;margin-bottom:14px;overflow-x:auto"></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:0.78rem;color:var(--muted)">
+        <span><span style="background:#dcfce7;padding:1px 7px;border-radius:3px">A</span> Match</span>
+        <span><span style="background:#fef9c3;padding:1px 7px;border-radius:3px">A</span> Transition</span>
+        <span><span style="background:#fee2e2;padding:1px 7px;border-radius:3px">A</span> Transversion</span>
+        <span><span style="background:#dbeafe;padding:1px 7px;border-radius:3px">-</span> Gap</span>
+      </div>
+      <div id="demo-scores" class="stats-grid" style="grid-template-columns:repeat(3,1fr);max-width:400px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 06 -->
+<section>
+  <div class="section-header">
+    <div class="section-label">Project 06 · MSc Thesis · Lund University 2025</div>
+    <div class="section-title">OriGENE: Cancer Driver Gene Classification</div>
+    <div class="section-desc">Benchmarking deep CNNs for cancer driver gene prediction — combining H3K4me3 epigenetic signals with mutation-guided attention to classify oncogenes and tumor suppressor genes. <em style="color:var(--muted);font-size:0.85rem">Code under prepublication review.</em></div>
+  </div>
+  <div class="card">
+    <div class="tab-bar" id="t6-tabs">
+      <button class="tab-btn active" onclick="tab('t6','overview')">Overview</button>
+      <button class="tab-btn" onclick="tab('t6','models')">Model Comparison</button>
+      <button class="tab-btn" onclick="tab('t6','crosspatient')">Cross-Patient</button>
+      <button class="tab-btn" onclick="tab('t6','features')">Feature Importance</button>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-panel active" id="t6-overview">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div style="font-weight:600;font-size:0.88rem;margin-bottom:10px">The Problem</div>
+          <p style="font-size:0.85rem;color:var(--muted);line-height:1.75;margin-bottom:14px">
+            Traditional cancer driver gene (CD) models rely solely on DNA mutations. But many CDs are epigenetically dysregulated — silenced or activated through histone modifications — without showing clear mutational patterns. This makes them invisible to mutation-centric classifiers like 20/20+ and DORGE.
+          </p>
+          <div style="font-weight:600;font-size:0.88rem;margin-bottom:10px">Approach</div>
+          <p style="font-size:0.85rem;color:var(--muted);line-height:1.75">
+            OriGENE is a CNN trained directly on H3K4me3 ChIP-seq enrichment profiles near gene promoters (40,000 bp window, 20 bp bins). An extended version adds a mutation-guided attention branch: 28 mutation features modulate the epigenetic feature map element-wise, letting the model up-weight channels linked to functional mutation cues.
+          </p>
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:0.88rem;margin-bottom:10px">Dataset &amp; Setup</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:0.83rem">
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">Dataset</span><span style="font-weight:600">GSE67471 (GEO)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">Patients</span><span style="font-weight:600">4 (Liver I/II, Lung I/II)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">Genes per set</span><span style="font-weight:600">1,454 (727 CD · 727 NG)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">CD labels</span><span style="font-weight:600">Cancer Gene Census v87</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">Validation</span><span style="font-weight:600">Stratified 5-fold CV · 1000× bootstrap</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">Epigenetic mark</span><span style="font-weight:600">H3K4me3 (promoter activity)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--bg);border-radius:6px"><span style="color:var(--muted)">Mutation features</span><span style="font-weight:600">28 (VEP + dbNSFP · Snakemake)</span></div>
+          </div>
+          <div style="font-weight:600;font-size:0.88rem;margin-top:14px;margin-bottom:8px">Benchmarked Against</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="badge badge-red">20/20+ (RF · mutation only)</span>
+            <span class="badge badge-purple">DORGE (Elastic Net · epi+mut)</span>
+            <span class="badge badge-blue">7 classical ML models</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODEL COMPARISON TAB -->
+    <div class="tab-panel" id="t6-models">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div style="font-weight:600;font-size:0.85rem;margin-bottom:12px;color:var(--muted)">AUROC by Model (mean ± 95% CI, 8 datasets)</div>
+          <div id="ch-origene-auroc"></div>
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:0.85rem;margin-bottom:12px;color:var(--muted)">Key Metrics — OriGENE (Epi+Mut) vs. Best Baseline</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--accent)">
+              <span style="color:var(--muted)">AUROC</span><span style="font-weight:700;color:var(--accent)">0.786</span><span style="color:var(--green);font-size:0.75rem">+0.085 vs 20/20+</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--purple)">
+              <span style="color:var(--muted)">AUPRC</span><span style="font-weight:700;color:var(--purple)">0.76</span><span style="color:var(--green);font-size:0.75rem">best across all models</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--green)">
+              <span style="color:var(--muted)">Sensitivity</span><span style="font-weight:700;color:var(--green)">75.4%</span><span style="color:var(--green);font-size:0.75rem">+23pp vs DORGE (Mut)</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--red)">
+              <span style="color:var(--muted)">F1 Score</span><span style="font-weight:700;color:var(--red)">0.727</span><span style="color:var(--green);font-size:0.75rem">+0.17 vs DORGE (Mut)</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--muted)">
+              <span style="color:var(--muted)">Accuracy</span><span style="font-weight:700">71.6%</span><span style="color:var(--green);font-size:0.75rem">+8pp vs 20/20+</span>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:10px 12px;background:#f0fdf4;border-radius:6px;border-left:3px solid var(--green)">
+            <div style="font-size:0.8rem;font-weight:600;color:var(--green);margin-bottom:4px">McNemar's Test</div>
+            <div style="font-size:0.8rem;color:var(--muted);line-height:1.6">OriGENE vs. all traditional models: <strong style="color:var(--text)">p &lt; 0.001</strong> (highly significant). OriGENE vs. OriGENE+Mut: p = 0.18 (ns) — epigenetic signal alone captures the core predictive power.</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:10px 12px;background:var(--bg);border-radius:6px;font-size:0.82rem;color:var(--muted)">
+        <strong style="color:var(--text)">Key finding:</strong> OriGENE captured 28–35% of CDs that traditional mutation-based models missed entirely. It does so by reading the epigenetic "bookmark" pattern of H3K4me3 near gene promoters — a signal that reflects gene regulation even when mutation data is sparse or absent.
+      </div>
+    </div>
+
+    <!-- CROSS-PATIENT TAB -->
+    <div class="tab-panel" id="t6-crosspatient">
+      <div style="font-weight:600;font-size:0.85rem;margin-bottom:12px;color:var(--muted)">Cross-Patient AUROC — trained on one patient, tested on another (unseen)</div>
+      <div id="ch-origene-cross"></div>
+      <div style="margin-top:14px;padding:10px 12px;background:var(--bg);border-radius:6px;font-size:0.82rem;color:var(--muted)">
+        <strong style="color:var(--text)">Generalizability:</strong> The model trained on Liver_I achieved AUROC 0.849 on Liver_II. Even cross-tissue generalization (e.g. Lung→Liver) held above 0.80, demonstrating that the learned epigenetic signatures of cancer driver genes are robust across patients and tissue types.
+      </div>
+    </div>
+
+    <!-- FEATURE IMPORTANCE TAB -->
+    <div class="tab-panel" id="t6-features">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div style="font-weight:600;font-size:0.85rem;margin-bottom:12px;color:var(--muted)">Top mutation features — normalized importance across models</div>
+          <div id="ch-origene-feat"></div>
+        </div>
+        <div style="font-size:0.83rem;color:var(--muted);line-height:1.75">
+          <div style="font-weight:600;color:var(--text);margin-bottom:8px">What the model learned</div>
+          <p style="margin-bottom:10px">All three models ranked <strong style="color:var(--text)">nonsilent/silent ratio</strong> as the top feature — reflecting how often a gene carries functionally impactful mutations, a strong signal distinguishing cancer drivers from neutral genes.</p>
+          <p style="margin-bottom:10px">OriGENE and 20/20+ both ranked <strong style="color:var(--text)">silent mutations/kb</strong> second. Though silent mutations don't alter protein sequence, a high rate suggests active transcription and replication-related mutational processes — informative for CDs vs. NGs.</p>
+          <p>DORGE's differing ranking reflects the additive, linear nature of elastic-net regression, which can underweight contextually dependent features. OriGENE's nonlinear attention mechanism better captures interaction effects between mutation and epigenetic signals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <div class="section-label">Skills</div>
+    <div class="section-title">Technical Stack</div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card"><div class="skill-title">Programming</div><div class="skill-tags"><span class="badge badge-blue">Python</span><span class="badge badge-blue">R</span><span class="badge badge-blue">SQL</span><span class="badge badge-blue">MATLAB</span><span class="badge badge-blue">Bash</span></div></div>
+    <div class="skill-card"><div class="skill-title">ML / Statistics</div><div class="skill-tags"><span class="badge badge-purple">scikit-learn</span><span class="badge badge-purple">TensorFlow</span><span class="badge badge-purple">Mixed-effects models</span><span class="badge badge-purple">Permutation tests</span></div></div>
+    <div class="skill-card"><div class="skill-title">Data &amp; Viz</div><div class="skill-tags"><span class="badge badge-green">pandas</span><span class="badge badge-green">seaborn</span><span class="badge badge-green">ggplot2</span><span class="badge badge-green">plotly</span><span class="badge badge-green">Tableau</span></div></div>
+    <div class="skill-card"><div class="skill-title">Workflows &amp; Infra</div><div class="skill-tags"><span class="badge badge-red">Snakemake</span><span class="badge badge-red">Git / GitHub</span><span class="badge badge-red">Linux / HPC</span><span class="badge badge-red">Jupyter</span></div></div>
+    <div class="skill-card"><div class="skill-title">Domain</div><div class="skill-tags"><span class="badge badge-blue">Behavioral data</span><span class="badge badge-blue">Bioinformatics</span><span class="badge badge-blue">Clinical research</span><span class="badge badge-blue">Neuroscience</span></div></div>
+    <div class="skill-card"><div class="skill-title">Languages</div><div class="skill-tags"><span class="badge badge-green">Mandarin (native)</span><span class="badge badge-green">English (TOEIC 975)</span><span class="badge badge-green">Russian (B1)</span><span class="badge badge-green">Swedish (beginner)</span></div></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <div class="section-label">Experience</div>
+    <div class="section-title">Work History</div>
+  </div>
+  <div class="card" style="padding:0">
+    <div style="display:flex;flex-direction:column">
+
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px">
+          <div style="font-weight:600;font-size:0.92rem">Student Assistant</div>
+          <div style="font-size:0.78rem;color:var(--muted)">May 2024 – Dec 2024</div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);margin-bottom:6px">Lund University, Sweden</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.65">Traced and annotated neural structures using CATMAID, contributing to the development of a 3D digital atlas of the honeybee brain.</p>
+      </div>
+
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px">
+          <div style="font-weight:600;font-size:0.92rem">Research Assistant</div>
+          <div style="font-size:0.78rem;color:var(--muted)">Sep 2018 – Dec 2022</div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);margin-bottom:6px">NCKU Hospital Photodynamic Lab, Taiwan</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.65">Supported long-term translational research projects across laboratory, animal, and clinical studies. Maintained structured research datasets and contributed to grant applications and research proposals.</p>
+      </div>
+
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px">
+          <div style="font-weight:600;font-size:0.92rem">Research Assistant — Clinical (Geriatrics)</div>
+          <div style="font-size:0.78rem;color:var(--muted)">Jun 2020 – Dec 2020</div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);margin-bottom:6px">NCKU Hospital Division of Geriatrics, Taiwan</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.65">Analyzed wearable triaxial accelerometer and clinical datasets to identify mobility patterns and fall-risk indicators among elderly participants.</p>
+      </div>
+
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px">
+          <div style="font-weight:600;font-size:0.92rem">Research Student Assistant</div>
+          <div style="font-size:0.78rem;color:var(--muted)">Aug 2015 – Sep 2018</div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);margin-bottom:6px">NCKU Cannabinoid Signalling Lab, Taiwan</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.65">Studied neural reward signaling and its influence on behavioral responses. Designed and analyzed behavioral experiments on learning and memory mechanisms. Applied statistical analysis to identify patterns in experimental data.</p>
+      </div>
+
+      <div style="padding:20px 24px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px">
+          <div style="font-weight:600;font-size:0.92rem">Administration Assistant</div>
+          <div style="font-size:0.78rem;color:var(--muted)">Feb 2023 – Aug 2023</div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--accent);margin-bottom:6px">NCKU Office of International Affairs, Taiwan</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.65">Supported international exchange and scholarship programs. Maintained structured datasets and coordinated communication across departments and international partners.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <div class="section-label">About</div>
+    <div class="section-title">Sue Hsiung</div>
+  </div>
+  <div class="card" style="padding:28px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <div>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:16px">
+          Data analyst with a background in psychology and computational science, focused on three intersecting areas: understanding human behavioral decision-making through data, applying machine learning to biological and clinical questions, and building reproducible computational pipelines for genomic and bioinformatic analysis.
+        </p>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.85">
+          My work spans behavioral neuroscience, oncology classification, sequence alignment, and clinical data analysis — always with an emphasis on translating complex patterns into interpretable results for interdisciplinary teams.
+        </p>
+        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+          <a href="https://github.com/SueH2000" target="_blank" class="btn btn-ghost" style="font-size:0.82rem">↗ GitHub</a>
+          <a href="/cdn-cgi/l/email-protection#493a3c2c672421213a203c272e092e24282025672a2624" class="btn btn-ghost" style="font-size:0.82rem">✉ Email</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:0.88rem;margin-bottom:12px">Education</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="border-left:3px solid var(--accent);padding-left:12px">
+            <div style="font-weight:600;font-size:0.85rem">MSc Applied Computational Science (Biology)</div>
+            <div style="font-size:0.8rem;color:var(--muted)">Lund University, Sweden · 2023–2025</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-top:2px">Computational modeling, biological data analysis, HPC</div>
+          </div>
+          <div style="border-left:3px solid var(--purple);padding-left:12px">
+            <div style="font-weight:600;font-size:0.85rem">MSc Psychology (Regenerative Medicine Technology)</div>
+            <div style="font-size:0.8rem;color:var(--muted)">National Cheng Kung University, Taiwan · 2017–2018</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-top:2px">Neural signaling and behavioral psychology</div>
+          </div>
+          <div style="border-left:3px solid var(--green);padding-left:12px">
+            <div style="font-weight:600;font-size:0.85rem">BSc Psychology (Minor: Foreign Language &amp; Literature)</div>
+            <div style="font-size:0.8rem;color:var(--muted)">National Cheng Kung University, Taiwan · 2013–2017</div>
+          </div>
+        </div>
+        <div style="font-weight:600;font-size:0.88rem;margin-top:18px;margin-bottom:10px">Selected Publications</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;display:flex;flex-direction:column;gap:6px">
+          <div>Huang, W. L., <strong style="color:var(--text)">Hsiung, M. H.</strong>, et al. (2021). Rottlerin, BDNF, and inhibitory avoidance memory. <em>Psychopharmacology</em>, 238(2).</div>
+          <div><strong style="color:var(--text)">Hsiung, M. H.</strong>, et al. (2020). MK-801 and mTOR signalling in mouse hippocampus. <em>Behavioural Brain Research</em>, 389.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-label">Contact</div>
+    <div class="section-title">Get in touch</div>
+  </div>
+  <div class="card" style="padding:28px">
+    <div class="contact-grid">
+      <div><div class="contact-label">Email</div><div class="contact-value"><a href="/cdn-cgi/l/email-protection#483b3d2d662520203b213d262f082f25292124662b2725"><span class="__cf_email__" data-cfemail="0c7f7969226164647f6579626b4c6b616d6560226f6361">[email&#160;protected]</span></a></div></div>
+      <div><div class="contact-label">GitHub</div><div class="contact-value"><a href="https://github.com/SueH2000" target="_blank">github.com/SueH2000</a></div></div>
+      <div><div class="contact-label">LinkedIn</div><div class="contact-value"><a href="https://linkedin.com" target="_blank">linkedin.com/in/—</a></div></div>
+      <div><div class="contact-label">Location</div><div class="contact-value">Lund, Sweden · Open to relocation</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>Sue Hsiung · Data Analyst &amp; Computational Scientist · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a696f7f3477727269736f747d5a7d777b737634797577">[email&#160;protected]</a></footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── TAB SYSTEM ──────────────────────────────────
+function tab(group, panel) {
+  const allBtns = document.querySelectorAll('#' + group + '-tabs .tab-btn');
+  const allPanels = document.querySelectorAll('[id^="' + group + '-"]');
+  allBtns.forEach(b => b.classList.remove('active'));
+  allPanels.forEach(p => { if (p.classList.contains('tab-panel')) p.classList.remove('active'); });
+  document.getElementById(group + '-' + panel).classList.add('active');
+  const panelIds = Array.from(allPanels).filter(p => p.classList.contains('tab-panel')).map(p => p.id);
+  const idx = panelIds.indexOf(group + '-' + panel);
+  if (allBtns[idx]) allBtns[idx].classList.add('active');
+}
+
+// ── CHART HELPERS ───────────────────────────────
+function barChart(el, data, {lw=150, fmt=v=>v, color='#3b82f6', maxVal=null, h=null}={}) {
+  const rows = data.length;
+  const bh = 20, gap = 32;
+  const H = rows * gap + 20;
+  const W = 520, rw = W - lw - 70;
+  const max = maxVal || Math.max(...data.map(d=>d.value)) * 1.1;
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;display:block;overflow:visible">`;
+  data.forEach((d, i) => {
+    const y = i * gap + 10;
+    const bw = (d.value / max) * rw;
+    const c = d.color || color;
+    s += `<rect x="${lw}" y="${y}" width="${rw}" height="${bh}" rx="3" fill="#f1f5f9"/>`;
+    s += `<rect x="${lw}" y="${y}" width="${bw}" height="${bh}" rx="3" fill="${c}" opacity="0.85"/>`;
+    s += `<text x="${lw-6}" y="${y+bh*0.72}" text-anchor="end" font-size="12" fill="#4a5568" font-family="Inter,sans-serif">${d.label}</text>`;
+    s += `<text x="${lw+bw+6}" y="${y+bh*0.72}" font-size="12" fill="#1a202c" font-weight="500" font-family="Inter,sans-serif">${fmt(d.value)}</text>`;
+  });
+  s += `</svg>`;
+  el.innerHTML = s;
+}
+
+function lineChart(el, datasets, {xKey='x', yKey='y', W=500, H=200, ml=50, mr=20, mb=30, mt=10, refX=[], refY=[], xLabel=''}={}) {
+  const iW = W-ml-mr, iH = H-mt-mb;
+  const allX = datasets.flatMap(d=>d.pts.map(p=>p[xKey]));
+  const allY = datasets.flatMap(d=>d.pts.map(p=>p[yKey]));
+  const xMin=Math.min(...allX), xMax=Math.max(...allX);
+  const yMin=Math.min(...allY)*0.94, yMax=Math.max(...allY)*1.04;
+  const px=x=>((x-xMin)/(xMax-xMin))*iW;
+  const py=y=>iH-((y-yMin)/(yMax-yMin))*iH;
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;display:block;overflow:visible">
+  <g transform="translate(${ml},${mt})">`;
+
+  // Grid
+  [0,0.25,0.5,0.75,1].forEach(pct=>{
+    const yv=pct*iH;
+    const val=yMax-pct*(yMax-yMin);
+    s+=`<line x1="0" y1="${yv}" x2="${iW}" y2="${yv}" stroke="#e2e8f0" stroke-width="1"/>`;
+    s+=`<text x="-5" y="${yv+4}" text-anchor="end" font-size="10" fill="#718096" font-family="Inter,sans-serif">${val<1?val.toFixed(2):val.toFixed(0)}</text>`;
+  });
+
+  refX.forEach(r=>{
+    const x=px(r.v);
+    s+=`<line x1="${x}" y1="0" x2="${x}" y2="${iH}" stroke="${r.c||'#e53e3e'}" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    s+=`<text x="${x+3}" y="13" font-size="10" fill="${r.c||'#e53e3e'}" font-family="Inter,sans-serif">${r.l||''}</text>`;
+  });
+  refY.forEach(r=>{
+    const y=py(r.v);
+    s+=`<line x1="0" y1="${y}" x2="${iW}" y2="${y}" stroke="${r.c||'#e53e3e'}" stroke-width="1" stroke-dasharray="3,2"/>`;
+  });
+
+  datasets.forEach(ds=>{
+    const pts=ds.pts.map(p=>`${px(p[xKey])},${py(p[yKey])}`).join(' ');
+    s+=`<polyline points="${pts}" fill="none" stroke="${ds.c}" stroke-width="2" stroke-linejoin="round"/>`;
+    if(ds.pts.length<=16) ds.pts.forEach(p=>{
+      s+=`<circle cx="${px(p[xKey])}" cy="${py(p[yKey])}" r="3" fill="${ds.c}"/>`;
+    });
+  });
+
+  // X ticks
+  const uniqX=[...new Set(allX)];
+  const step=Math.ceil(uniqX.length/6);
+  uniqX.filter((_,i)=>i%step===0).forEach(x=>{
+    s+=`<text x="${px(x)}" y="${iH+14}" text-anchor="middle" font-size="10" fill="#718096" font-family="Inter,sans-serif">${x}</text>`;
+  });
+  if(xLabel) s+=`<text x="${iW/2}" y="${iH+28}" text-anchor="middle" font-size="11" fill="#718096" font-family="Inter,sans-serif">${xLabel}</text>`;
+
+  s+=`<line x1="0" y1="${iH}" x2="${iW}" y2="${iH}" stroke="#e2e8f0"/>`;
+  s+=`<line x1="0" y1="0" x2="0" y2="${iH}" stroke="#e2e8f0"/>`;
+  s+=`</g></svg>`;
+  el.innerHTML = s;
+}
+
+// ── DATA ────────────────────────────────────────
+const FEATS=[
+  {label:'TyWS (風速)',value:0.198},{label:'hpa (氣壓)',value:0.171},
+  {label:'X7_radius',value:0.134},{label:'X10_radius',value:0.112},
+  {label:'alert_num',value:0.097},{label:'Precp (雨量)',value:0.089},
+  {label:'route',value:0.071},{label:'born_spotN',value:0.048},
+  {label:'RH (濕度)',value:0.039},{label:'Temperature',value:0.028},{label:'lat/lon',value:0.013},
+];
+const SCALER=[
+  {label:'TyWS km/h',min:18,max:77},{label:'hpa hPa',min:895,max:992},
+  {label:'Precp mm',min:0,max:1165},{label:'alert_num',min:9,max:52},
+  {label:'X10_r km',min:0,max:120},{label:'X7_r km',min:80,max:320},
+  {label:'RH %',min:52,max:100},{label:'Temp °C',min:8.47,max:33.4},
+];
+const ALZ_M=[
+  {label:'RF (7 clusters)',value:97.4,color:'#3b82f6'},{label:'DT (7 clusters)',value:95.6,color:'#6366f1'},
+  {label:'RF (binary)',value:93.7,color:'#8b5cf6'},{label:'Neural Network',value:84.2,color:'#a78bfa'},
+];
+const ALZ_F=[
+  {label:'FunctionalAssessment',value:0.36},{label:'ADL',value:0.33},
+  {label:'MemoryComplaints',value:0.31},{label:'MMSE',value:0.24},
+  {label:'BehavioralProblems',value:0.22},{label:'SleepQuality',value:0.06},
+  {label:'EducationLevel',value:0.04},{label:'CholesterolHDL',value:0.04},
+  {label:'Hypertension',value:0.03},{label:'FamilyHistory',value:0.03},
+];
+const ELBOW=[{x:1,y:21500},{x:2,y:19300},{x:3,y:17600},{x:4,y:16500},{x:5,y:16000},
+  {x:6,y:14700},{x:7,y:13650},{x:8,y:13800},{x:9,y:13500},{x:10,y:12700},{x:15,y:11900},{x:20,y:11100},{x:29,y:9200}];
+const SIL=[{x:2,y:0.146},{x:3,y:0.142},{x:4,y:0.101},{x:5,y:0.086},
+  {x:6,y:0.094},{x:7,y:0.100},{x:8,y:0.092},{x:10,y:0.104},{x:15,y:0.101},{x:20,y:0.109},{x:29,y:0.127}];
+const NN=[{x:1,y:0.62},{x:5,y:0.54},{x:10,y:0.45},{x:15,y:0.40},{x:20,y:0.36},{x:25,y:0.33},{x:31,y:0.31}];
+const NNV=[{x:1,y:0.65},{x:5,y:0.58},{x:10,y:0.51},{x:15,y:0.49},{x:20,y:0.47},{x:25,y:0.46},{x:31,y:0.46}];
+
+const LJ_PTS=[];
+for(let r=0.92;r<=2.8;r+=0.06){
+  const u=4*1.05*(Math.pow(1/r,12)-Math.pow(1/r,6));
+  LJ_PTS.push({x:parseFloat(r.toFixed(2)),y:parseFloat(Math.max(-1.5,Math.min(u,3)).toFixed(3))});
+}
+const ENERGY=[{x:0,y:-3.2},{x:20,y:-3.8},{x:40,y:-4.2},{x:60,y:-4.5},{x:80,y:-4.7},
+  {x:100,y:-4.85},{x:150,y:-4.9},{x:200,y:-4.92},{x:300,y:-4.93},{x:500,y:-4.93}];
+const RDF=[{x:0.5,y:0},{x:0.8,y:0.1},{x:0.9,y:0.4},{x:1.0,y:1.8},{x:1.1,y:3.2},
+  {x:1.12,y:3.4},{x:1.2,y:2.8},{x:1.35,y:1.4},{x:1.5,y:0.9},{x:1.7,y:1.1},
+  {x:1.85,y:1.3},{x:2.0,y:1.1},{x:2.5,y:1.0}];
+
+const FUNNEL=[
+  {label:'All Leads',value:9240,pct:'100%',color:'#3b82f6'},
+  {label:'Visited Website',value:7047,pct:'76.3%',color:'#6366f1'},
+  {label:'Highly Engaged',value:2952,pct:'31.9%',color:'#8b5cf6'},
+  {label:'Converted',value:3561,pct:'38.5%',color:'#a78bfa'},
+];
+const CHANNELS=[
+  {label:'Welingak',value:98.6},{label:'Reference',value:91.8},
+  {label:'Google',value:40.0},{label:'Organic Search',value:37.8},
+  {label:'Direct Traffic',value:32.2},{label:'Olark Chat',value:25.5},{label:'Facebook',value:23.6},
+];
+const MKT_F=[
+  {label:'Will revert (email)',value:0.145},{label:'Total Time on Site',value:0.095},
+  {label:'Ringing',value:0.045},{label:'SMS Sent',value:0.033},
+  {label:'Page Views/Visit',value:0.028},{label:'Total Visits',value:0.025},
+  {label:'Lead Source:Google',value:0.021},{label:'Last Activity:Email',value:0.018},
+  {label:'Lead Quality',value:0.016},{label:'Asymmetrique Score',value:0.014},
+];
+const ROC=[{x:0,y:0},{x:0.02,y:0.18},{x:0.05,y:0.38},{x:0.08,y:0.55},{x:0.1,y:0.65},
+  {x:0.15,y:0.78},{x:0.2,y:0.87},{x:0.3,y:0.93},{x:0.4,y:0.96},{x:0.5,y:0.975},
+  {x:0.6,y:0.984},{x:0.8,y:0.995},{x:1,y:1}];
+
+// ── PIPELINE ─────────────────────────────────────
+const PIP=[
+  {n:'CWB Data',sub:'13 weather inputs',d:'Precp, RH, StnHeight, StnPres, T.Max, T.Min, Temperature, WDGust, WD, lat, lon, ...'},
+  {n:'KNN Imputer',sub:'k=5 distance-weighted',d:'13 of 24 features imputed. k=5, weights="distance". Fills missing weather station readings.'},
+  {n:'MinMaxScaler',sub:'24 features → [0,1]',d:'Scaled using min/max from ~12,466 typhoon records. Loaded from MMscaler.joblib (sklearn 1.0.2).'},
+  {n:'RandomForest',sub:'420 trees, depth 45',d:'n_estimators=420, max_depth=45, min_samples_split=6, class_weight="balanced", criterion="gini"'},
+  {n:'predict_proba',sub:'P(typhoon day off)',d:'Returns probability 0–100% for selected county. Threshold at 50% for binary prediction.'},
+];
+
+function initPipeline() {
+  const el = document.getElementById('pip-steps');
+  el.innerHTML = PIP.map((p,i)=>`
+    <div class="pipeline-step${i===0?' active':''}" onclick="pipClick(${i})">
+      <div class="step-num">Step ${i+1}</div>
+      <div class="step-name">${p.n}</div>
+      <div class="step-sub">${p.sub}</div>
+    </div>`).join('');
+  document.getElementById('pip-detail').textContent = PIP[0].d;
+  document.getElementById('pip-detail').classList.add('show');
+}
+function pipClick(i) {
+  document.querySelectorAll('.pipeline-step').forEach((s,j)=>s.classList.toggle('active',j===i));
+  const d = document.getElementById('pip-detail');
+  d.textContent = PIP[i].d;
+  d.classList.add('show');
+}
+
+// ── SCALER CHART ─────────────────────────────────
+function scalerChart() {
+  const el = document.getElementById('ch-scaler');
+  const lw=100, rw=300, bh=18, gap=30, H=SCALER.length*gap+20, W=lw+rw+60;
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;display:block">`;
+  SCALER.forEach((d,i)=>{
+    const y=i*gap+10;
+    const scale=rw/(d.max*1.1||1);
+    const x0=d.min*scale, bw=(d.max-d.min)*scale;
+    s+=`<rect x="${lw}" y="${y}" width="${rw}" height="${bh}" rx="3" fill="#f1f5f9"/>`;
+    s+=`<rect x="${lw+x0}" y="${y}" width="${bw}" height="${bh}" rx="3" fill="#3b82f6" opacity="0.75"/>`;
+    s+=`<text x="${lw-6}" y="${y+bh*0.72}" text-anchor="end" font-size="12" fill="#4a5568" font-family="Inter,sans-serif">${d.label}</text>`;
+    s+=`<text x="${lw+x0+3}" y="${y+13}" font-size="9" fill="white" font-weight="600">${d.min}</text>`;
+    s+=`<text x="${lw+x0+bw+4}" y="${y+13}" font-size="9" fill="#1a202c">${d.max}</text>`;
+  });
+  s+=`</svg>`;
+  el.innerHTML=s;
+}
+
+// ── FUNNEL CHART ──────────────────────────────────
+function funnelChart() {
+  const el=document.getElementById('ch-funnel');
+  const lw=130,rw=280,bh=26,gap=40,H=FUNNEL.length*gap+20,W=lw+rw+120;
+  const maxV=FUNNEL[0].value;
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;display:block">`;
+  FUNNEL.forEach((d,i)=>{
+    const y=i*gap+10, bw=(d.value/maxV)*rw;
+    s+=`<rect x="${lw}" y="${y}" width="${rw}" height="${bh}" rx="3" fill="#f1f5f9"/>`;
+    s+=`<rect x="${lw}" y="${y}" width="${bw}" height="${bh}" rx="3" fill="${d.color}" opacity="0.8"/>`;
+    s+=`<text x="${lw-6}" y="${y+bh*0.72}" text-anchor="end" font-size="12" fill="#4a5568" font-family="Inter,sans-serif">${d.label}</text>`;
+    s+=`<text x="${lw+bw+8}" y="${y+bh*0.72}" font-size="12" fill="#1a202c" font-family="Inter,sans-serif">${d.value.toLocaleString()} <tspan fill="#718096">(${d.pct})</tspan></text>`;
+  });
+  s+=`</svg>`;
+  el.innerHTML=s;
+}
+
+// ── ROC CHART ─────────────────────────────────────
+function rocChart() {
+  const el=document.getElementById('ch-roc');
+  const W=420,H=260,ml=40,mr=20,mt=10,mb=36;
+  const iW=W-ml-mr, iH=H-mt-mb;
+  const px=x=>x*iW, py=y=>iH-y*iH;
+  const pts=ROC.map(p=>`${px(p.x)},${py(p.y)}`).join(' ');
+  const s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:${W}px;display:block">
+  <g transform="translate(${ml},${mt})">
+  <rect width="${iW}" height="${iH}" rx="4" fill="#f8faff"/>
+  <polyline points="0,${iH} ${iW},0" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polyline points="${pts}" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+  <line x1="${px(0.4)}" y1="0" x2="${px(0.4)}" y2="${iH}" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="${px(0.8)}" y1="0" x2="${px(0.8)}" y2="${iH}" stroke="#10b981" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="${px(0.41)}" y="14" font-size="10" fill="#b45309" font-family="Inter,sans-serif">Cold</text>
+  <text x="${px(0.81)}" y="14" font-size="10" fill="#065f46" font-family="Inter,sans-serif">Hot</text>
+  <text x="${iW/2}" y="${iH/2}" text-anchor="middle" font-size="14" font-weight="700" fill="#3b82f6" font-family="Inter,sans-serif">AUROC = 0.980</text>
+  <text x="${iW/2}" y="${iH+26}" text-anchor="middle" font-size="11" fill="#718096" font-family="Inter,sans-serif">False Positive Rate</text>
+  <line x1="0" y1="${iH}" x2="${iW}" y2="${iH}" stroke="#e2e8f0"/>
+  <line x1="0" y1="0" x2="0" y2="${iH}" stroke="#e2e8f0"/>
+  </g></svg>`;
+  el.innerHTML=s;
+}
+
+// ── MSA DEMO ──────────────────────────────────────
+const SEQS=[
+  {id:'HsaA',seq:'ATGCTAGCTAGC-ATCGATCG'},
+  {id:'HsaB',seq:'ATGCTAGCTAGCAATCGATCG'},
+  {id:'HsaC',seq:'ATGCTGGCTAGCAATCGAACG'},
+  {id:'HsaD',seq:'ACGCTAGCAAGC-ATCGATTG'},
+];
+const TS={A:'G',G:'A',T:'C',C:'T'};
+const TV={A:['T','C'],G:['T','C'],T:['A','G'],C:['A','G']};
+
+function runDemo() {
+  const ai=parseInt(document.getElementById('seqA').value);
+  const bi=parseInt(document.getElementById('seqB').value);
+  const viz=document.getElementById('demo-viz');
+  const sc=document.getElementById('demo-scores');
+  if(ai===bi){viz.innerHTML='<span style="color:var(--muted)">Select two different sequences.</span>';sc.innerHTML='';return;}
+  const sa=SEQS[ai].seq, sb=SEQS[bi].seq;
+  let rowA='',rowB='',score=0,matches=0;
+  for(let k=0;k<Math.min(sa.length,sb.length);k++){
+    const a=sa[k],b=sb[k];
+    let bg='transparent';
+    if(a==='-'||b==='-'){bg='#dbeafe';score--;}
+    else if(a===b){bg='#dcfce7';score++;matches++;}
+    else if(TS[a]===b){bg='#fef9c3';score--;}
+    else{bg='#fee2e2';score-=2;}
+    const cell=c=>`<span style="display:inline-block;width:20px;text-align:center;background:${bg};border-radius:2px;margin:1px">${c}</span>`;
+    rowA+=cell(a); rowB+=cell(b);
+  }
+  viz.innerHTML=`<div style="margin-bottom:3px"><span style="font-size:0.7rem;color:var(--muted);display:inline-block;width:40px">${SEQS[ai].id}</span>${rowA}</div><div><span style="font-size:0.7rem;color:var(--muted);display:inline-block;width:40px">${SEQS[bi].id}</span>${rowB}</div>`;
+  const ident=((matches/sa.length)*100).toFixed(1)+'%';
+  sc.innerHTML=`<div class="stat-card"><div class="stat-value" style="color:var(--green)">${ident}</div><div class="stat-label">Identity</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--accent)">${score}</div><div class="stat-label">Score</div></div>
+    <div class="stat-card"><div class="stat-value">${sa.length}bp</div><div class="stat-label">Length</div></div>`;
+}
+
+// ── ORIGENE DATA ──────────────────────────────────
+const OG_AUROC = [
+  {label:'OriGENE (Epi+Mut)', value:0.786, ci:'[0.777–0.795]', color:'#3b82f6'},
+  {label:'OriGENE (Epi)',      value:0.778, ci:'[0.770–0.786]', color:'#60a5fa'},
+  {label:'DORGE (Epi)',        value:0.701, ci:'[0.692–0.711]', color:'#8b5cf6'},
+  {label:'DORGE (Epi+Mut)',    value:0.695, ci:'[0.685–0.705]', color:'#a78bfa'},
+  {label:'20/20+ (Mut)',       value:0.668, ci:'[0.658–0.679]', color:'#e53e3e'},
+  {label:'DORGE (Mut)',        value:0.664, ci:'[0.655–0.674]', color:'#fc8181'},
+];
+const OG_CROSS = [
+  {label:'Liver_I → Liver_II', value:0.849, color:'#3b82f6'},
+  {label:'Liver_I → Lung_I',   value:0.808, color:'#3b82f6'},
+  {label:'Liver_I → Lung_II',  value:0.826, color:'#3b82f6'},
+  {label:'Lung_I → Lung_II',   value:0.826, color:'#60a5fa'},
+  {label:'Lung_I → Liver_I',   value:0.805, color:'#60a5fa'},
+  {label:'Lung_II → Lung_I',   value:0.805, color:'#93c5fd'},
+  {label:'Lung_II → Liver_I',  value:0.802, color:'#93c5fd'},
+  {label:'Liver_II → Lung_I',  value:0.777, color:'#bfdbfe'},
+];
+const OG_FEAT = [
+  {label:'Nonsilent/silent ratio',  value:1.00},
+  {label:'Silent mutations/kb',     value:0.72},
+  {label:'Missense mutations/kb',   value:0.61},
+  {label:'Missense/total mutations',value:0.48},
+  {label:'Silent fraction',         value:0.41},
+  {label:'Missense/benign ratio',   value:0.35},
+  {label:'LoF/missense mutations',  value:0.29},
+  {label:'Splicing/silent ratio',   value:0.24},
+  {label:'PolyPhen-2 score',        value:0.19},
+  {label:'LoF mutations/kb',        value:0.15},
+];
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  initPipeline();
+  barChart(document.getElementById('ch-feat'), FEATS, {lw:150,fmt:v=>(v*100).toFixed(1)+'%',maxVal:0.22});
+  scalerChart();
+  barChart(document.getElementById('ch-alz-models'), ALZ_M, {lw:170,fmt:v=>v+'%',maxVal:102});
+  barChart(document.getElementById('ch-alz-feats'), ALZ_F, {lw:170,fmt:v=>'r='+v.toFixed(2),maxVal:0.42,color:'#8b5cf6'});
+  lineChart(document.getElementById('ch-elbow'), [{pts:ELBOW,c:'#3b82f6'}], {xLabel:'k',refX:[{v:7,l:'k=7'}]});
+  lineChart(document.getElementById('ch-sil'), [{pts:SIL,c:'#8b5cf6'}], {xLabel:'k',refX:[{v:2,l:'k=2'}]});
+  lineChart(document.getElementById('ch-nn'), [{pts:NN,c:'#3b82f6'},{pts:NNV,c:'#f59e0b'}], {xLabel:'Epoch',refX:[{v:31,l:'stop'}]});
+  lineChart(document.getElementById('ch-lj'), [{pts:LJ_PTS,c:'#3b82f6'}], {xLabel:'r/σ',refY:[{v:0,c:'#e2e8f0'},{v:-1.05,c:'#e53e3e'}]});
+  lineChart(document.getElementById('ch-energy'), [{pts:ENERGY,c:'#3b82f6'}], {xLabel:'Iterations ×1000',refX:[{v:100,l:'equil.'}]});
+  lineChart(document.getElementById('ch-rdf'), [{pts:RDF,c:'#3b82f6'}], {xLabel:'r/σ',refX:[{v:1.12,l:'r≈1.1σ'}],refY:[{v:1,c:'#94a3b8'}]});
+  funnelChart();
+  barChart(document.getElementById('ch-channels'), CHANNELS, {lw:120,fmt:v=>v.toFixed(0)+'%',maxVal:110});
+  barChart(document.getElementById('ch-mktfeat'), MKT_F, {lw:160,fmt:v=>v.toFixed(3),maxVal:0.17,color:'#8b5cf6'});
+  // OriGENE charts
+  barChart(document.getElementById('ch-origene-auroc'), OG_AUROC, {lw:170, fmt:v=>v.toFixed(3), maxVal:0.90, color:'#3b82f6', colorFn: d=>d.color});
+  barChart(document.getElementById('ch-origene-cross'), OG_CROSS, {lw:200, fmt:v=>v.toFixed(3), maxVal:0.90, color:'#3b82f6', colorFn: d=>d.color});
+  barChart(document.getElementById('ch-origene-feat'),  OG_FEAT,  {lw:190, fmt:v=>v.toFixed(2), maxVal:1.10, color:'#8b5cf6'});
+  rocChart();
+  runDemo();
+});
+</script>
+</body>
+</html>
